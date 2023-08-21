@@ -10,11 +10,12 @@ public class App
 {
 	static LocalTime start;
 	public static JFrame frm; 
+	public static String mode = "";
 	public App()
 	{
 		//Set up the app window
 		frm = new JFrame("Boudie's timer");
-		frm.setSize(250, 200);
+		frm.setSize(270, 200);
 		frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frm.add(new Screen());
 		frm.setVisible(true);
@@ -64,7 +65,7 @@ class TimeUpdaterThread implements Runnable
 			long hoursPassed = minutesPassed / 60;
 			secondsPassed %= 60;
 			minutesPassed %= 60;
-			App.frm.setTitle(String.format("%1$dh %2$dm %3$ds", hoursPassed, minutesPassed, secondsPassed));
+			App.frm.setTitle(String.format("%4$s %1$dh %2$dm %3$ds", hoursPassed, minutesPassed, secondsPassed, App.mode));
 		}
 	}
 }

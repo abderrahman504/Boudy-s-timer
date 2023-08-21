@@ -11,22 +11,24 @@ public class Screen extends JPanel implements ActionListener
 {
 	JButton workbutton, breakButton;
 	JPanel logPanel;
-	Color centerColor = new Color(133, 186, 94);
+	Color workColor = new Color(139, 149, 208), breakColor = new Color(133, 186, 94);
 	public Screen()
 	{
 		setLayout(new BorderLayout());
 		//Creating buttons
 		workbutton = new JButton("Work");
-		breakButton = new JButton("Break");
 		workbutton.addActionListener(this);
+		workbutton.setBackground(workColor);
+		breakButton = new JButton("Break");
 		breakButton.addActionListener(this);
+		breakButton.setBackground(breakColor);
 		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		southPanel.add(workbutton);
 		southPanel.add(breakButton);
 		add(southPanel, BorderLayout.SOUTH);
 		//Creating log panel
+		// logPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 10));
 		logPanel = new JPanel(new GridLayout(0,1, 0, 3));
-		logPanel.setBackground(centerColor);
 		JScrollPane scrollPane = new JScrollPane(logPanel);
 		add(scrollPane, BorderLayout.CENTER);
 	}
@@ -43,8 +45,10 @@ public class Screen extends JPanel implements ActionListener
 		String str = String.format("Took break at %1$tr", LocalTime.now());
 		JLabel entry = new JLabel(str);
 		logPanel.add(entry);
+		logPanel.setBackground(breakColor);
 		// repaint();
 		revalidate();
+		App.mode = "Break";
 		App.setStartTime();
 	}
 	
@@ -54,8 +58,10 @@ public class Screen extends JPanel implements ActionListener
 		String str = String.format("Started work at %1$tr", LocalTime.now());
 		JLabel entry = new JLabel(str);
 		logPanel.add(entry);
+		logPanel.setBackground(workColor);
 		// repaint();
 		revalidate();
+		App.mode = "Work";
 		App.setStartTime();
 	}
 }
