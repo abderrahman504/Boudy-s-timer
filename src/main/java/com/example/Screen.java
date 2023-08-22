@@ -47,21 +47,13 @@ public class Screen extends JPanel implements ActionListener
 	{
 		logPanel.setBackground(breakColor);
 		//Add entry to the log
-		String str = String.format("Took break at %1$tr", LocalTime.now());
+		String str = String.format("Break at %1$tI:%1$tM %1$Tp", LocalTime.now());
 		JLabel entry = new JLabel(str);
 		logPanel.add(entry);
 		if (mode == Mode.WORK)
 		{
-			long secondsPassed = App.getStartTime().until(LocalTime.now(), ChronoUnit.SECONDS);
-			long minutesPassed = secondsPassed / 60;
-			long hoursPassed = minutesPassed / 60;
-			secondsPassed %= 60;
-			minutesPassed %= 60;
-			String str2;
-			if(minutesPassed == 0) str2 = String.format("%1$ds", secondsPassed);
-			else if(hoursPassed == 0) str2 = String.format("%2$dm %1$ds", secondsPassed, minutesPassed);
-			else str2 = String.format("%3$dh %2$dm %1$ds", secondsPassed, minutesPassed, hoursPassed);
-			str2 = "Worked for " + str2;
+			String str2 = getPassedTime();
+			str2 = "Stopped work after " + str2;
 			entry = new JLabel(str2);
 			logPanel.add(entry);
 		}
@@ -70,26 +62,19 @@ public class Screen extends JPanel implements ActionListener
 		mode = Mode.BREAK;
 		App.setStartTime();
 	}
+	//%tI:%tM %Tp
 	
 	void OnWorkPressed()
 	{
 		logPanel.setBackground(workColor);
 		//Add entry to the log
-		String str = String.format("Started work at %1$tr", LocalTime.now());
+		String str = String.format("Work at %1$tI:%1$tM %1$Tp", LocalTime.now());
 		JLabel entry = new JLabel(str);
 		logPanel.add(entry);
 		if (mode == Mode.BREAK)
 		{
-			long secondsPassed = App.getStartTime().until(LocalTime.now(), ChronoUnit.SECONDS);
-			long minutesPassed = secondsPassed / 60;
-			long hoursPassed = minutesPassed / 60;
-			secondsPassed %= 60;
-			minutesPassed %= 60;
-			String str2;
-			if(minutesPassed == 0) str2 = String.format("%1$ds", secondsPassed);
-			else if(hoursPassed == 0) str2 = String.format("%2$dm %1$ds", secondsPassed, minutesPassed);
-			else str2 = String.format("%3$dh %2$dm %1$ds", secondsPassed, minutesPassed, hoursPassed);
-			str2 = "On break for " + str2;
+			String str2 = getPassedTime();
+			str2 = "Stopped break after " + str2;
 			entry = new JLabel(str2);
 			logPanel.add(entry);
 		}
@@ -97,5 +82,18 @@ public class Screen extends JPanel implements ActionListener
 		App.mode = "Work";
 		mode = Mode.WORK;
 		App.setStartTime();
+	}
+
+
+	String getPassedTime()
+	{
+		long secondsPassed = App.getStartTime().until(LocalTime.now(), ChronoUnit.SECONDS);
+		long minutesPassed = secondsPassed / 60;
+		long hoursPassed = minutesPassed / 60;
+		minutesPassed %= 60;
+		String str;
+		if(hoursPassed == 0) str = String.format("%1$dm", minutesPassed);
+		else str = String.format("%1$dh %2$dm", hoursPassed, minutesPassed);
+		return str;
 	}
 }

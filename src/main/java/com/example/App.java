@@ -63,12 +63,10 @@ class TimeUpdaterThread implements Runnable
 			long secondsPassed = App.getStartTime().until(LocalTime.now(), ChronoUnit.SECONDS);
 			long minutesPassed = secondsPassed / 60;
 			long hoursPassed = minutesPassed / 60;
-			secondsPassed %= 60;
 			minutesPassed %= 60;
 			String str;
-			if(minutesPassed == 0) str = String.format("%1$s %2$ds", App.mode, secondsPassed);
-			else if(hoursPassed == 0) str = String.format("%1$s %3$dm %2$ds", App.mode, secondsPassed, minutesPassed);
-			else str = String.format("%1$s %4$dh %3$dm %2$ds", App.mode, secondsPassed, minutesPassed, hoursPassed);
+			if(hoursPassed == 0) str = String.format("%1$s %2$dm ", App.mode, minutesPassed);
+			else str = String.format("%1$s %2$dh %3$dm", App.mode, hoursPassed, minutesPassed);
 			App.frm.setTitle(str);
 		}
 	}
