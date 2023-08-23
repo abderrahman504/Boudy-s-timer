@@ -12,7 +12,7 @@ public class Screen extends JPanel implements ActionListener
 {
 	JButton workbutton, breakButton;
 	JPanel logPanel, sidePanel;
-	JLabel totalWorkLabel, totalBreakLabel;
+	JLabel totalWorkLabel, totalBreakLabel, runningTimeLabel;
 	Color workColor = new Color(139, 149, 208), breakColor = new Color(133, 186, 94);
 	Color sideTextColor = new Color(250, 25, 0);
 	enum Mode {NONE, WORK, BREAK};
@@ -53,8 +53,14 @@ public class Screen extends JPanel implements ActionListener
 		sidePanel.add(totalBreakLabel);
 		add(sidePanel, BorderLayout.WEST);
 
+		//Create running time label
+		runningTimeLabel = new JLabel();
+		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		add(topPanel, BorderLayout.NORTH);
+		topPanel.add(runningTimeLabel);
 		//Creat time tally thread
-		tallyThread = new TimeTallyThread(totalWorkLabel, totalBreakLabel);
+		tallyThread = new TimeTallyThread(totalWorkLabel, totalBreakLabel, runningTimeLabel);
+
 	}
 
 	public void actionPerformed(ActionEvent ae)
@@ -127,12 +133,13 @@ public class Screen extends JPanel implements ActionListener
 
 class TimeTallyThread implements Runnable
 {
-	JLabel workTally, breakTally;
+	JLabel workTally, breakTally, runningTimeTally;
 	long prevWorkTime, prevBreakTime;
-	public TimeTallyThread(JLabel workLbl, JLabel breakLbl)
+	public TimeTallyThread(JLabel workLbl, JLabel breakLbl, JLabel runningTimeLbl)
 	{
 		workTally = workLbl;
 		breakTally = breakLbl;
+		runningTimeTally = runningTimeLbl;
 		Thread t = new Thread(this, "Tally thread");
 		t.start();
 	}
@@ -143,11 +150,15 @@ class TimeTallyThread implements Runnable
 		{
 			try {Thread.sleep(250);}
 			catch (InterruptedException e) {System.out.println("Tally thread couldn't sleep");}
-			// System.out.println("Tally thread running");
-			long extraTime = App.getStartTime().until(LocalTime.now(), ChronoUnit.SECONDS);
+			
+			long runningTime = App.getStartTime().until(LocalTime.now(), ChronoUnit.SECONDS);
+			//Update running tally
+			long x = (runningTime / 60) % 60, y = runningTime / 3600;
+			runningTimeTally.setText(String.format("%1$dh %2$dm %3$ds", y, x, runningTime % 60));
+			//Update work and break tallies
 			long secondsPassed=0, minutesPassed, hoursPassed;
-			if (Screen.mode == Screen.Mode.BREAK) secondsPassed = extraTime + prevBreakTime;
-			else if (Screen.mode == Screen.Mode.WORK) secondsPassed = extraTime + prevWorkTime;
+			if (Screen.mode == Screen.Mode.BREAK) secondsPassed = runningTime + prevBreakTime;
+			else if (Screen.mode == Screen.Mode.WORK) secondsPassed = runningTime + prevWorkTime;
 			minutesPassed = secondsPassed / 60;
 			hoursPassed = minutesPassed / 60;
 			minutesPassed %= 60;
