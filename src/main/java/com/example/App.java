@@ -58,7 +58,7 @@ class TimeUpdaterThread implements Runnable
 	{
 		while(true) 
 		{
-			try{Thread.sleep(1000);}
+			try{Thread.sleep(250);}
 			catch (InterruptedException e) {System.out.println("Updater thread couldn't sleep");}
 			long secondsPassed = App.getStartTime().until(LocalTime.now(), ChronoUnit.SECONDS);
 			long minutesPassed = secondsPassed / 60;
