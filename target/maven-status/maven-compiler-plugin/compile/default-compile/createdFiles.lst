@@ -2,4 +2,5 @@ com\example\App.class
 com\example\Screen$Mode.class
 com\example\Screen.class
 com\example\AppThread.class
+com\example\TimeTallyThread.class
 com\example\TimeUpdaterThread.class
