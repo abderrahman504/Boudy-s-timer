@@ -40,25 +40,33 @@ public class Screen extends JPanel implements ActionListener
 		logPanel = new JPanel(new GridLayout(0,1, 0, 3));
 		logScrollPane = new JScrollPane(logPanel);
 		add(logScrollPane, BorderLayout.CENTER);
-
-		//Creating side panel
-		sidePanel = new JPanel(new GridLayout(4, 1));
-		sidePanel.add(new JLabel("Total Work:"));
-		totalWorkLabel = new JLabel();
-		totalWorkLabel.setForeground(sideTextColor);
-		sidePanel.add(totalWorkLabel);
 		
-		sidePanel.add(new JLabel("Total Break:"));
-		totalBreakLabel = new JLabel();
-		totalBreakLabel.setForeground(sideTextColor);
-		sidePanel.add(totalBreakLabel);
-		add(sidePanel, BorderLayout.WEST);
-
 		//Create running time label
 		runningTimeLabel = new JLabel();
+		runningTimeLabel.setFont(new Font("Ariel", Font.BOLD, 20));
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		add(topPanel, BorderLayout.NORTH);
 		topPanel.add(runningTimeLabel);
+
+		//Creating side panel
+		sidePanel = new JPanel(new GridLayout(4, 1));
+		
+		JLabel workHeading = new JLabel("Total Work:");
+		workHeading.setFont(new Font("Ariel", Font.BOLD, 14));
+		sidePanel.add(workHeading);
+		totalWorkLabel = new JLabel();
+		totalWorkLabel.setFont(new Font("Ariel", Font.BOLD, 12));
+		totalWorkLabel.setForeground(sideTextColor);
+		sidePanel.add(totalWorkLabel);
+		
+		JLabel breakHeading = new JLabel("Total Break:");
+		breakHeading.setFont(new Font("Ariel", Font.BOLD, 14));
+		sidePanel.add(breakHeading);
+		totalBreakLabel = new JLabel();
+		totalBreakLabel.setFont(new Font("Ariel", Font.BOLD, 12));
+		totalBreakLabel.setForeground(sideTextColor);
+		sidePanel.add(totalBreakLabel);
+		add(sidePanel, BorderLayout.WEST);
 
 		//Creat time updater thread
 		timeUpdaterThread = new TimeUpdaterThread(frm, totalWorkLabel, totalBreakLabel, runningTimeLabel);
