@@ -30,7 +30,7 @@ public class TimeUpdaterThread implements Runnable
 	{
 		while(true) 
 		{
-			try{Thread.sleep(250);}
+			try{Thread.sleep(100);}
 			catch (InterruptedException e) {System.out.println("Updater thread couldn't sleep");}
 			updateTitle();
 			updateTallies();
