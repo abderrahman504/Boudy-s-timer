@@ -12,14 +12,15 @@ public class Screen extends JPanel implements ActionListener
 {
 	JButton workbutton, breakButton;
 	JPanel logPanel, sidePanel;
+	JScrollPane logScrollPane;
 	JLabel totalWorkLabel, totalBreakLabel, runningTimeLabel;
 	Color workColor = new Color(139, 149, 208), breakColor = new Color(133, 186, 94);
 	Color sideTextColor = new Color(250, 25, 0);
 	enum Mode {NONE, WORK, BREAK};
 	static Mode mode = Mode.NONE;
-	TimeTallyThread tallyThread;
+	TimeUpdaterThread timeUpdaterThread;
 	
-	public Screen()
+	public Screen(JFrame frm)
 	{
 		setLayout(new BorderLayout());
 		
@@ -37,8 +38,8 @@ public class Screen extends JPanel implements ActionListener
 		
 		//Creating log panel
 		logPanel = new JPanel(new GridLayout(0,1, 0, 3));
-		JScrollPane scrollPane = new JScrollPane(logPanel);
-		add(scrollPane, BorderLayout.CENTER);
+		logScrollPane = new JScrollPane(logPanel);
+		add(logScrollPane, BorderLayout.CENTER);
 
 		//Creating side panel
 		sidePanel = new JPanel(new GridLayout(4, 1));
@@ -58,9 +59,9 @@ public class Screen extends JPanel implements ActionListener
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		add(topPanel, BorderLayout.NORTH);
 		topPanel.add(runningTimeLabel);
-		//Creat time tally thread
-		tallyThread = new TimeTallyThread(totalWorkLabel, totalBreakLabel, runningTimeLabel);
 
+		//Creat time updater thread
+		timeUpdaterThread = new TimeUpdaterThread(frm, totalWorkLabel, totalBreakLabel, runningTimeLabel);
 	}
 
 	public void actionPerformed(ActionEvent ae)
@@ -76,20 +77,15 @@ public class Screen extends JPanel implements ActionListener
 		String str = String.format("Break at %1$tI:%1$tM %1$Tp", LocalTime.now());
 		JLabel entry = new JLabel(str);
 		logPanel.add(entry);
-		if (mode == Mode.WORK)
-		{
-			tallyThread.addWorkTime(getPassedTimeLong());
-			String str2 = getPassedTimeStr();
-			str2 = "Stopped work after " + str2;
-			entry = new JLabel(str2);
-			logPanel.add(entry);
-		}
+		//Store past work time in tally thread
+		if (mode == Mode.WORK) timeUpdaterThread.addWorkTime(getPassedTimeLong());
 		revalidate();
+		scrollLogDown();
 		App.mode = "Break";
 		mode = Mode.BREAK;
+		//Restart timer
 		App.setStartTime();
 	}
-	//%tI:%tM %Tp
 	
 	void OnWorkPressed()
 	{
@@ -98,17 +94,13 @@ public class Screen extends JPanel implements ActionListener
 		String str = String.format("Work at %1$tI:%1$tM %1$Tp", LocalTime.now());
 		JLabel entry = new JLabel(str);
 		logPanel.add(entry);
-		if (mode == Mode.BREAK)
-		{
-			tallyThread.addBreakTime(getPassedTimeLong());
-			String str2 = getPassedTimeStr();
-			str2 = "Stopped break after " + str2;
-			entry = new JLabel(str2);
-			logPanel.add(entry);
-		}
+		//Store past break time in tally thread
+		if (mode == Mode.BREAK) timeUpdaterThread.addBreakTime(getPassedTimeLong());
 		revalidate();
+		scrollLogDown();
 		App.mode = "Work";
 		mode = Mode.WORK;
+		//Restart timer
 		App.setStartTime();
 	}
 
@@ -129,53 +121,19 @@ public class Screen extends JPanel implements ActionListener
 	{
 		return App.getStartTime().until(LocalTime.now(), ChronoUnit.SECONDS);
 	}
-}
 
-class TimeTallyThread implements Runnable
-{
-	JLabel workTally, breakTally, runningTimeTally;
-	long prevWorkTime, prevBreakTime;
-	public TimeTallyThread(JLabel workLbl, JLabel breakLbl, JLabel runningTimeLbl)
+	//We call this whenever we add a label to the log. 
+	//We have a small delay before we scroll the log down because of a bug with Swing where the ScrollPane doesn't know its size got bigger immediately after adding a label to it.
+	void scrollLogDown()
 	{
-		workTally = workLbl;
-		breakTally = breakLbl;
-		runningTimeTally = runningTimeLbl;
-		Thread t = new Thread(this, "Tally thread");
+		Thread t = new Thread(new Runnable() {
+			public void run()
+			{
+				try {Thread.sleep(1);}
+				catch (InterruptedException e) {System.out.println("Log updater thread couldn't sleep");}
+				logScrollPane.getVerticalScrollBar().setValue(logScrollPane.getVerticalScrollBar().getMaximum());
+			}
+		}, "Update log thread");
 		t.start();
 	}
-
-	public void run()
-	{
-		while (true)
-		{
-			try {Thread.sleep(250);}
-			catch (InterruptedException e) {System.out.println("Tally thread couldn't sleep");}
-			
-			long runningTime = App.getStartTime().until(LocalTime.now(), ChronoUnit.SECONDS);
-			//Update running tally
-			long x = (runningTime / 60) % 60, y = runningTime / 3600;
-			runningTimeTally.setText(String.format("%1$dh %2$dm %3$ds", y, x, runningTime % 60));
-			//Update work and break tallies
-			long secondsPassed=0, minutesPassed, hoursPassed;
-			if (Screen.mode == Screen.Mode.BREAK) secondsPassed = runningTime + prevBreakTime;
-			else if (Screen.mode == Screen.Mode.WORK) secondsPassed = runningTime + prevWorkTime;
-			minutesPassed = secondsPassed / 60;
-			hoursPassed = minutesPassed / 60;
-			minutesPassed %= 60;
-			secondsPassed %= 60;
-			if (Screen.mode == Screen.Mode.BREAK)
-			{
-				breakTally.setText(String.format("%1$dh %2$dm", hoursPassed, minutesPassed));
-				workTally.setText(String.format("%1$dh %2$dm", prevWorkTime/3600, (prevWorkTime/60)%60));
-			}
-			else
-			{
-				workTally.setText(String.format("%1$dh %2$dm", hoursPassed, minutesPassed));
-				breakTally.setText(String.format("%1$dh %2$dm", prevBreakTime/3600, (prevBreakTime/60)%60));	
-			}
-		}
-	}
-
-	public void addWorkTime(long seconds) {prevWorkTime += seconds;}
-	public void addBreakTime(long seconds) {prevBreakTime += seconds;}
 }
