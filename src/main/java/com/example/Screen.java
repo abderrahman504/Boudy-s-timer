@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 
 public class Screen extends JPanel implements ActionListener
 {
-	JButton workbutton, breakButton;
+	JButton workbutton, breakButton, resetButton;
 	JPanel logPanel, sidePanel;
 	JScrollPane logScrollPane;
 	JLabel totalWorkLabel, totalBreakLabel, runningTimeLabel;
@@ -31,9 +31,12 @@ public class Screen extends JPanel implements ActionListener
 		breakButton = new JButton("Break");
 		breakButton.addActionListener(this);
 		breakButton.setBackground(breakColor);
+		resetButton = new JButton("Reset");
+		resetButton.addActionListener(this);
 		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		southPanel.add(workbutton);
 		southPanel.add(breakButton);
+		southPanel.add(resetButton);
 		add(southPanel, BorderLayout.SOUTH);
 		
 		//Creating log panel
@@ -76,6 +79,7 @@ public class Screen extends JPanel implements ActionListener
 	{
 		if (ae.getActionCommand().equals("Break")) OnBreakPressed();
 		else if(ae.getActionCommand().equals("Work")) OnWorkPressed();
+		else if (ae.getActionCommand().equals("Reset")) OnResetPressed();
 	}
 
 	void OnBreakPressed()
@@ -103,7 +107,8 @@ public class Screen extends JPanel implements ActionListener
 		JLabel entry = new JLabel(str);
 		logPanel.add(entry);
 		//Store past break time in tally thread
-		if (mode == Mode.BREAK) timeUpdaterThread.addBreakTime(getPassedTimeLong());
+		if (mode == Mode.BREAK)
+			timeUpdaterThread.addBreakTime(getPassedTimeLong());
 		revalidate();
 		scrollLogDown();
 		App.mode = "Work";
@@ -112,6 +117,14 @@ public class Screen extends JPanel implements ActionListener
 		App.setStartTime();
 	}
 
+	void OnResetPressed()
+	{
+		timeUpdaterThread.reset();
+		App.setStartTime();
+		App.mode = "";
+		mode = Mode.NONE;
+		logPanel.setBackground(new Color(1f,1f,1f));
+	}
 
 	String getPassedTimeStr()
 	{

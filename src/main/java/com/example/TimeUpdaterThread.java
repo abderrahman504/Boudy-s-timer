@@ -79,5 +79,6 @@ public class TimeUpdaterThread implements Runnable
 	
 	public void addWorkTime(long seconds) {prevWorkTime += seconds;}
 	public void addBreakTime(long seconds) {prevBreakTime += seconds;}
+	public void reset() {prevBreakTime = 0; prevWorkTime = 0;}
 
 }
