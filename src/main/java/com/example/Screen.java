@@ -91,6 +91,7 @@ public class Screen extends JPanel implements ActionListener
 		logPanel.add(entry);
 		//Store past work time in tally thread
 		if (mode == Mode.WORK) timeUpdaterThread.addWorkTime(getPassedTimeLong());
+		else if (mode == Mode.BREAK) timeUpdaterThread.addBreakTime(getPassedTimeLong());
 		revalidate();
 		scrollLogDown();
 		App.mode = "Break";
@@ -109,6 +110,7 @@ public class Screen extends JPanel implements ActionListener
 		//Store past break time in tally thread
 		if (mode == Mode.BREAK)
 			timeUpdaterThread.addBreakTime(getPassedTimeLong());
+		if (mode == Mode.WORK) timeUpdaterThread.addWorkTime(getPassedTimeLong());
 		revalidate();
 		scrollLogDown();
 		App.mode = "Work";
