@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dalt527qaa6sl"
+path="res://.godot/imported/rollover1.ogg-c0fd27d86a4ea35b0e69b640feb0ba10.oggvorbisstr"
+
+[deps]
+
+source_file="res://UI assets/kenney_ui-pack/Bonus/rollover1.ogg"
+dest_files=["res://.godot/imported/rollover1.ogg-c0fd27d86a4ea35b0e69b640feb0ba10.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
