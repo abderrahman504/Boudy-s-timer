@@ -1,6 +1,6 @@
 package com.example;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import javax.swing.JFrame;
@@ -40,7 +40,7 @@ public class TimeUpdaterThread implements Runnable
 
 	void updateTitle()
 	{
-		long secondsPassed = App.getStartTime().until(LocalTime.now(), ChronoUnit.SECONDS);
+		long secondsPassed = App.getStartTime().until(LocalDateTime.now(), ChronoUnit.SECONDS);
 		long minutesPassed = secondsPassed / 60;
 		long hoursPassed = minutesPassed / 60;
 		minutesPassed %= 60;
@@ -52,7 +52,7 @@ public class TimeUpdaterThread implements Runnable
 
 	void updateTallies()
 	{
-		long runningTime = App.getStartTime().until(LocalTime.now(), ChronoUnit.SECONDS);
+		long runningTime = App.getStartTime().until(LocalDateTime.now(), ChronoUnit.SECONDS);
 		//Update running tally
 		long x = (runningTime / 60) % 60, y = runningTime / 3600;
 		runningTimeLbl.setText(String.format("%1$dh %2$dm %3$ds", y, x, runningTime % 60));

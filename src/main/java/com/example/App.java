@@ -1,13 +1,15 @@
 package com.example;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 public class App 
 {
-	static LocalTime start;
+	static LocalDateTime start;
 	public static String mode = "";
 	public App()
 	{
@@ -28,9 +30,9 @@ public class App
 		SwingUtilities.invokeLater(new AppThread());
     }
 
-	public static void setStartTime() {start = LocalTime.now();}
+	public static void setStartTime() {start = LocalDateTime.now();}
 
-	public static LocalTime getStartTime() {return start;}
+	public static LocalDateTime getStartTime() {return start;}
 }
 
 

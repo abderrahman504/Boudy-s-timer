@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 
@@ -86,7 +87,7 @@ public class Screen extends JPanel implements ActionListener
 	{
 		logPanel.setBackground(breakColor);
 		//Add entry to the log
-		String str = String.format("Break at %1$tI:%1$tM %1$Tp", LocalTime.now());
+		String str = String.format("Break at %1$tI:%1$tM %1$Tp", LocalDateTime.now());
 		JLabel entry = new JLabel(str);
 		logPanel.add(entry);
 		//Store past work time in tally thread
@@ -104,7 +105,7 @@ public class Screen extends JPanel implements ActionListener
 	{
 		logPanel.setBackground(workColor);
 		//Add entry to the log
-		String str = String.format("Work at %1$tI:%1$tM %1$Tp", LocalTime.now());
+		String str = String.format("Work at %1$tI:%1$tM %1$Tp", LocalDateTime.now());
 		JLabel entry = new JLabel(str);
 		logPanel.add(entry);
 		//Store past break time in tally thread
@@ -130,7 +131,7 @@ public class Screen extends JPanel implements ActionListener
 
 	String getPassedTimeStr()
 	{
-		long secondsPassed = App.getStartTime().until(LocalTime.now(), ChronoUnit.SECONDS);
+		long secondsPassed = App.getStartTime().until(LocalDateTime.now(), ChronoUnit.SECONDS);
 		long minutesPassed = secondsPassed / 60;
 		long hoursPassed = minutesPassed / 60;
 		minutesPassed %= 60;
@@ -142,7 +143,7 @@ public class Screen extends JPanel implements ActionListener
 
 	long getPassedTimeLong()
 	{
-		return App.getStartTime().until(LocalTime.now(), ChronoUnit.SECONDS);
+		return App.getStartTime().until(LocalDateTime.now(), ChronoUnit.SECONDS);
 	}
 
 	//We call this whenever we add a label to the log. 
