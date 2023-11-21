@@ -1,0 +1,122 @@
+[gd_scene load_steps=3 format=3 uid="uid://crfk1rju4fjil"]
+
+[ext_resource type="Theme" uid="uid://cu5rliqjjmvwv" path="res://Kenney-UI-White-Theme.tres" id="1_ivd54"]
+[ext_resource type="Script" path="res://src/MainScreen.cs" id="2_mp8fk"]
+
+[node name="MainScreen" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ivd54")
+script = ExtResource("2_mp8fk")
+
+[node name="Counter" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -62.0
+offset_top = 12.0
+offset_right = 61.0
+offset_bottom = 38.0
+grow_horizontal = 2
+text = "0h 12m 54s"
+horizontal_alignment = 1
+
+[node name="Log Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 39.0
+offset_right = -8.0
+offset_bottom = 156.0
+grow_horizontal = 0
+grow_vertical = 2
+metadata/_edit_group_ = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Log Panel"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Log Panel/ScrollContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="."]
+self_modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 34.0
+offset_right = 97.0
+offset_bottom = 60.0
+text = "Total work:"
+
+[node name="Work Tally" type="Label" parent="."]
+self_modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 64.0
+offset_right = 96.0
+offset_bottom = 90.0
+text = "0h 0m 0s"
+
+[node name="Label2" type="Label" parent="."]
+self_modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 100.0
+offset_bottom = 122.0
+text = "Total break:"
+
+[node name="Break Tally" type="Label" parent="."]
+self_modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 128.0
+offset_right = 96.0
+offset_bottom = 154.0
+text = "0h 0m 0s"
+
+[node name="Buttons" type="GridContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -98.0
+offset_top = -86.0
+offset_right = 100.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 8
+columns = 2
+metadata/_edit_group_ = true
+
+[node name="Work" type="Button" parent="Buttons"]
+self_modulate = Color(0.541176, 0.662745, 0.921569, 1)
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Work"
+
+[node name="Break" type="Button" parent="Buttons"]
+self_modulate = Color(0.309804, 0.690196, 0.392157, 1)
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Break"
+
+[node name="Reset Work" type="Button" parent="Buttons"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Reset Work"
+
+[node name="Reset All" type="Button" parent="Buttons"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Reset All"
