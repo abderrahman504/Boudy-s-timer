@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://csflsov0b3t58"]
+
+[ext_resource type="Theme" uid="uid://cu5rliqjjmvwv" path="res://Kenney-UI-White-Theme.tres" id="1_3mpfs"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_3mpfs")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button normal" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 123.0
+offset_right = 103.0
+offset_bottom = 159.0
+text = "dsfsfsd"
+
+[node name="Button2 pressed" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 60.0
+offset_right = 108.0
+offset_bottom = 96.0
+text = "dsfsfsd"
+
+[node name="Button3 disabled" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 191.0
+offset_top = 87.0
+offset_right = 254.0
+offset_bottom = 123.0
+text = "dsfsfsd"
