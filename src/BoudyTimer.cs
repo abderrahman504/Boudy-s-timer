@@ -57,8 +57,18 @@ public class BoudyTimer
 
 	void DrawTallies()
 	{
-		workTally.Text = string.Format("{0}h {1}m", WorkTime / 3600, WorkTime / 60 % 60);
-		breakTally.Text = string.Format("{0}h {1}m", BreakTime / 3600, BreakTime / 60 % 60);
+		var difference = DateTime.Now - latestSessionStart;
+		long currentWork = 0, currentBreak = 0;
+		if (state == SessionState.BREAK)
+		{
+			currentBreak = difference.Seconds + difference.Minutes * 60 + difference.Hours * 3600;
+		}
+		else
+		{
+			currentWork = difference.Seconds + difference.Minutes * 60 + difference.Hours * 3600;
+		}
+		workTally.Text = string.Format("{0}h {1}m", (WorkTime+currentWork) / 3600, (WorkTime+currentWork) / 60 % 60);
+		breakTally.Text = string.Format("{0}h {1}m", (BreakTime+currentBreak) / 3600, (BreakTime+currentBreak) / 60 % 60);
 	}
 
 
